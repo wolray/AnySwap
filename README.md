@@ -1,6 +1,6 @@
 # Any Swap
 
-Swap words, parameters, and expressions from current cursor.
+Swap words, parameters, and expressions from current cursor on Sublime Text 3.
 
 Behaves just like move-element-left/right in IntelliJ's IDEs, but more intelligently.
 It is based on a general abstract-syntax-tree analyzer that enables you to swap complicated
@@ -8,7 +8,9 @@ expressions recursively while maintaining a correct operator precedence.
 
 ## Usage
 
-Bind command `any_swap` with parameter `forward` equals `true` or `false` to keys that you prefer. It is already set to alt+[ and alt+] by default.
+First of all, install package `AnySwap` via `Package Control`.
+
+Bind command `any_swap` with parameter `forward` equals `true` or `false` to keys that you prefer, which is set to alt+[ and alt+] by default.
 ```
 { "keys": ["alt+["], "command": "any_swap", "args": {"forward": false} },
 { "keys": ["alt+]"], "command": "any_swap", "args": {"forward": true} }
