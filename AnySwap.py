@@ -226,7 +226,7 @@ class Parser(object):
     def add2(self, node):
         txt = node.tokens[0].txt
         if txt == '\n':
-            if self.curr.prior < MAX:
+            if self.curr.rule & 1 > 0:
                 return
         elif self.wait:
             recent = self.wait[-1]
