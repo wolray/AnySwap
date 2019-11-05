@@ -1,0 +1,6 @@
+[
+    {
+        "caption": "Swap anything based on current syntax tree",
+        "command": "any_swap"
+    }
+]

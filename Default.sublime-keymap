@@ -1,0 +1,4 @@
+[
+	{ "keys": ["alt+["], "command": "any_swap", "args": {"forward": false} },
+	{ "keys": ["alt+]"], "command": "any_swap", "args": {"forward": true} }
+]
