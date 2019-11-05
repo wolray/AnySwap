@@ -1,12 +1,12 @@
 # Any Swap
 
-Swap parameters, words, and expressions from current cursor.
+Swap words, parameters, and expressions from current cursor.
 
 Behaves just like move-element-left/right in IntelliJ's IDEs, but more intelligently.
-It is based on a general syntax analyzer that enables you to swap complicated
+It is based on a general abstract-syntax-tree analyzer that enables you to swap complicated
 expressions recursively while maintaining a correct operator precedence.
 
-## Usage and Features
+## Usage
 
 Bind command `any_swap` with parameter `forward` equals `true` or `false` to keys that you prefer. It is already set to alt+[ and alt+] by default.
 ```
@@ -14,6 +14,8 @@ Bind command `any_swap` with parameter `forward` equals `true` or `false` to key
 { "keys": ["alt+]"], "command": "any_swap", "args": {"forward": true} }
 ```
 Place your cursor (|) on the begin/end of a word/paren, then trigger the command.
+
+## Features
 
 **Words:**
 ```
