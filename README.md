@@ -7,7 +7,7 @@ It is based on a general abstract-syntax-tree analyzer that enables user to swap
 
 ## Usage
 
-First of all, install package `AnySwap` via `Package Control`.
+First of all, install package `AnySwap` via `Package Control` (not published yet) or clone this repo into your `Sublime Text 3/Packages/` folder. 
 
 Bind command `any_swap` with parameter `forward` equals `true` or `false` to keys that you prefer. The command is set to `alt+[` and `alt+]` by default.
 ```
