@@ -36,7 +36,7 @@ a| * b + c   => b * a| + c   => c + b * a|
 (a| + b) * c => (b + a|) * c => c * (b + a)|
 ```
 
-**Expressions with function:**
+**Expressions with functions:**
 ```
 func(a| + b, c) * d => func(b + a|, c) * d  => func(c, b + a|) * d   => d * func(c, b + a)|
 ```
