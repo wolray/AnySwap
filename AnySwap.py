@@ -13,7 +13,6 @@ class Lexer(object):
         self.rule_dict = {}
         self.register(['{', '\\[', '\\('], 1)
         self.register(['\\)', '\\]', '}'], 2)
-        _keywords = self.register([], 1)
         self.register([';'], 2)
         self.register(['\n'], 3)
         self.register([','], 3)
@@ -30,7 +29,6 @@ class Lexer(object):
         self.regexes += ['"[^"]*?"', "'[^']*?'", '<{}*?>'.format(WORD)]
         self.register(['<', '>'], *_compare)
         self.regexes.append('{}+'.format(WORD))
-        self.register(['if', 'elif', 'return'], *_keywords)
         self.register(['or'], *_or)
         self.register(['and'], *_and)
         self.register(['not'], *_not)
@@ -174,12 +172,6 @@ class ParseNode(object):
                 res = found
         return res
 
-    def locate_inner(self, pos):
-        for p in enumerate(self.tokens):
-            if p[1].rg.contains(pos):
-                return p
-        return None
-
     def render(self):
         return self._print([], [], [])
 
@@ -307,7 +299,6 @@ class AnySwapCommand(EnhancedText):
             return
         lf, rt = target.right() if forward else target.left()
         # print('pair', lf, rt)
-        pair = ()
         if lf and rt:
             if lf.rule == 2:
                 if rt.rule != 2:
@@ -316,19 +307,5 @@ class AnySwapCommand(EnhancedText):
                 return
             b1, e1 = lf.bound()
             b2, e2 = rt.bound()
-            pair = (self.rg(b1, e1), self.rg(b2, e2))
-        elif target.parent.prior < 0:
-            p = target.locate_inner(pos)
-            if not p:
-                return
-            i = p[0]
-            n = len(target.tokens)
-            if forward:
-                if 0 <= i < n - 1:
-                    pair = (p[1].rg, target.tokens[i + 1].rg)
-            else:
-                if i > 0:
-                    pair = (target.tokens[i - 1].rg, p[1].rg)
-        if pair:
-            self.swap(edit, *pair)
-            self.move_to(pair[1].end() if forward else pair[0].begin())
+            self.swap(edit, self.rg(b1, e1), self.rg(b2, e2))
+            self.move_to(e2 if forward else b1)
