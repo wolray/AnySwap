@@ -49,7 +49,6 @@ func(a().b(c| + d), f)  => func(a().b(d + c|), f)   => func(f, a().b(d + c)|)
 **Logic expressions:**
 ```
 a| and b or c   => b and a| or c    => c or b and a|
-if a| and b     => if b and a|
 ```
 
 **Array expressions:**
