@@ -13,8 +13,9 @@ class Lexer(object):
         self.rule_dict = {}
         self.register(['{', '\\[', '\\('], 1)
         self.register(['\\)', '\\]', '}'], 2)
-        _left = self.register([], 1)
-        self.register([';', '\n'], 2)
+        _keywords = self.register([], 1)
+        self.register([';'], 2)
+        self.register(['\n'], 3)
         self.register([','], 3)
         self.register([':', '=>', '<='], 3)
         _assign = self.register(['\\+=', '-=', '\\*=', '%=', '&=', '\\|=', '^='], 3)
@@ -29,7 +30,7 @@ class Lexer(object):
         self.regexes += ['"[^"]*?"', "'[^']*?'", '<{}*?>'.format(WORD)]
         self.register(['<', '>'], *_compare)
         self.regexes.append('{}+'.format(WORD))
-        self.register(['if', 'return'], *_left)
+        self.register(['if', 'elif', 'return'], *_keywords)
         self.register(['or'], *_or)
         self.register(['and'], *_and)
         self.register(['not'], *_not)
@@ -74,7 +75,7 @@ class Token(object):
         self.rg = None
 
     def __repr__(self):
-        return self.txt
+        return r'\n' if self.txt == '\n' else self.txt
 
     def __len__(self):
         return self.end - self.beg
@@ -88,9 +89,8 @@ class ParseNode(object):
         self.prior = token.prior
         self.rule = token.rule
         self.index = 0
-        if token.rg is not None:
-            self.beg = token.rg.begin()
-            self.end = token.rg.end()
+        self.beg = token.rg.begin() if token.rg is not None else -1
+        self.end = token.rg.end() if token.rg is not None else -1
 
     def __repr__(self):
         return ''.join([t.__repr__() for t in self.tokens])
@@ -109,7 +109,8 @@ class ParseNode(object):
     def insert(self, node):
         last = self.pop()
         self.add(node)
-        node.add(last)
+        if last:
+            node.add(last)
 
     def merge(self, node):
         self.tokens += node.tokens
@@ -170,7 +171,7 @@ class ParseNode(object):
         for n in self.sub_nodes:
             found = n.locate(pos)
             if found:
-                return found
+                res = found
         return res
 
     def locate_inner(self, pos):
@@ -223,11 +224,8 @@ class Parser(object):
             self.wait.append((back, self.curr))
 
     def add2(self, node):
-        txt = node.tokens[0].txt
-        if txt == '\n':
-            if self.curr.rule & 1 > 0:
-                return
-        elif self.wait:
+        if self.wait:
+            txt = node.tokens[0].txt
             recent = self.wait[-1]
             if txt == recent[0]:
                 self.curr = recent[1]
@@ -237,6 +235,8 @@ class Parser(object):
         self.add3(node)
 
     def add3(self, node):
+        if node.tokens[0].txt == '\n' and self.curr.rule > 0:
+            return
         if self.curr.rule & 1 == 0:
             self.curr = self.curr.parent
         while self.curr.cmp(node) >= 0:
