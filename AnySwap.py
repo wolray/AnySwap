@@ -179,14 +179,13 @@ class ParseNode(object):
                 return p
         return None
 
-    def show(self):
+    def render(self):
         return self._print([], [], [])
 
     def _print(self, res, p1, p2):
         res += p1 + [self.__repr__(), '\n']
         n = len(self.sub_nodes)
-        for i in range(n):
-            child = self.sub(i)
+        for i, child in enumerate(self.sub_nodes):
             if i < n - 1:
                 child._print(res, p2 + ['├─'], p2 + ['│ '])
             else:
@@ -205,7 +204,7 @@ class Parser(object):
         new = ParseNode(token)
         # print('add ', self.curr, token)
         self.adders[token.rule](new)
-        # print('add_', self.root.show())
+        # print('add_', self.root.render())
 
     def add0(self, node):
         if self.curr.rule == 0:
@@ -296,7 +295,7 @@ class AnySwapCommand(EnhancedText):
         parser = Parser()
         for t in tokens:
             parser.add(t)
-        # print(parser.root.show())
+        # print(parser.root.render())
         target = parser.root.locate(pos)
         # print('target', target)
         return target
