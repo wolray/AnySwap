@@ -1,6 +1,6 @@
 # Any Swap
 
-A plugin of `Sublime Text 3` that helps user to swap words, parameters, and expressions from current cursor.
+A plugin of `Sublime Text 3` that helps user to swap parameters, lines, and expressions from current cursor.
 
 Behaves just like `Move-Element-Left/Right` in IntelliJ's IDEs, but more intelligently.
 It is based on a general abstract-syntax-tree analyzer that enables user to swap complicated expressions recursively while maintaining a correct operator precedence.
@@ -18,15 +18,16 @@ Place your cursor (|) on the begin/end of a word/paren, then trigger the command
 
 ## Features
 
-**Words:**
-```
-tom| jerry => jerry tom|    => |tom jerry
-```
-
 **Parameters:**
 ```
 func(a|, b)         => func(b, a|)         => func(|a, b)
 func(int a|, int b) => func(int b, int a|) => func(|int a, int b)
+```
+
+**Lines:**
+```
+a|, b   =>  b, a|   =>  c, d
+c, d        c, d        b, a|
 ```
 
 **Math expressions:**
