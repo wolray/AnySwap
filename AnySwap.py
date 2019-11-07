@@ -15,9 +15,11 @@ class Lexer(object):
         self.register(['\\)', '\\]', '}'], 2)
         self.register([';'], 2)
         self.register(['\n'], 3)
+        _return = self.register([], 1)
         self.register([','], 3)
         self.register([':', '=>', '<='], 3)
         _assign = self.register(['\\+=', '-=', '\\*=', '%=', '&=', '\\|=', '^='], 3)
+        _condition = self.register([], 1)
         _or = self.register(['\\|\\|'], 3)
         _and = self.register(['&&'], 3)
         _not = self.register(['!'], 1)
@@ -29,9 +31,11 @@ class Lexer(object):
         self.regexes += ['"[^"]*?"', "'[^']*?'", '<{}*?>'.format(WORD)]
         self.register(['<', '>'], *_compare)
         self.regexes.append('{}+'.format(WORD))
+        self.register(['return'], *_return)
         self.register(['or'], *_or)
         self.register(['and'], *_and)
         self.register(['not'], *_not)
+        self.register(['while', 'if', 'elif'], *_condition)
         self.full_reg = '|'.join(self.regexes)
         self.pair_dict = {'(': ')', '[': ']', '{': '}'}
 
