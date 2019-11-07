@@ -2,7 +2,7 @@ import sublime
 import sublime_plugin
 
 MAX = 32
-WORD = '[0-9a-zA-Z_\\.#@^]'
+WORD = '[0-9a-zA-Z_\\.~@$]'
 
 
 class Lexer(object):
@@ -26,6 +26,7 @@ class Lexer(object):
         self.register(['==', '!=', '~='], 3)
         self.register(['='], *_assign)
         _compare = self.register(['<=', '>='], 3)
+        self.register(['&', '\\|', '\\^'], 3)
         self.register(['\\+', '-'], 3)
         self.register(['\\*', '/', '%'], 3)
         self.regexes += ['"[^"]*?"', "'[^']*?'", '<{}*?>'.format(WORD)]
