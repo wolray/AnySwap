@@ -131,21 +131,32 @@ class ParseNode(object):
         end = max(self.end, self.sub(-1).bound()[1])
         return beg, end
 
-    def prev_node(self):
+    def get_prev(self):
         if self.index > 0:
             return self.parent.sub(self.index - 1)
         return None
 
-    def next_node(self):
+    def get_next(self):
         if self.index < len(self.parent.sub_nodes) - 1:
             return self.parent.sub(self.index + 1)
         return None
+
+    def left(self):
+        # print('left', self, self.parent, left)
+        if not self.parent:
+            return None, self
+        left = self.get_prev()
+        if left:
+            if left.cmp(self.parent) == 0 and self.parent.rule == 3:
+                left = left.sub(-1)
+            return left, self
+        return self.parent.left()
 
     def right(self):
         # print('right', self, self.parent, self.index)
         if not self.parent:
             return self, None
-        right = self.next_node()
+        right = self.get_next()
         if right:
             return self, right
         res = self.parent.right()
@@ -153,17 +164,6 @@ class ParseNode(object):
             if self.parent.cmp(self.parent.parent) == 0:
                 return self, res[1]
         return res
-
-    def left(self):
-        # print('left', self, self.parent, left)
-        if not self.parent:
-            return None, self
-        left = self.prev_node()
-        if left:
-            if left.cmp(self.parent) == 0 and self.parent.rule == 3:
-                left = left.sub(-1)
-            return left, self
-        return self.parent.left()
 
     def locate(self, pos):
         res = None
