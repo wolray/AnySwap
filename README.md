@@ -49,6 +49,7 @@ func(a().b(c| + d), f)  => func(a().b(d + c|), f)   => func(f, a().b(d + c)|)
 **Logic expressions:**
 ```
 a| and b or c   => b and a| or c    => c or b and a|
+if a| and b 	=> if b and a|
 ```
 
 **Array expressions:**
@@ -59,7 +60,8 @@ a[b[c| + 1]][0] => a[b[1 + c|]][0] => a[0][b[1 + c]|]
 
 **Statements:**
 ```
-a = 1|; b = 2; => b = 2; a = 1;|
+a = 1|; b = 2; 	=> b = 2; a = 1;|
+return a|, b 	=> return b, a|
 ```
 
 **Cross-line expressions:**
